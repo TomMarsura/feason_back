@@ -38,7 +38,6 @@ async function main() {
     console.log('Connected to MongoDB');
     const db = client.db('feason');
     const collection = db.collection('recipes');
-
     
 }
 
