@@ -39,51 +39,7 @@ async function main() {
     const db = client.db('feason');
     const collection = db.collection('recipes');
 
-    try{
-        const insertData = await collection.insertMany([
-            {
-                "name": "Pancakes",
-                "description": "A delicious breakfast food",
-                "ingredients": [
-                    "1 1/2 cups all-purpose flour",
-                    "3 1/2 teaspoons baking powder",
-                    "1 teaspoon salt",
-                    "1 tablespoon white sugar",
-                    "1 1/4 cups milk",
-                    "1 egg",
-                    "3 tablespoons butter, melted"
-                ]
-            },
-            {
-                "name": "Bacon",
-                "description": "A delicious breakfast food",
-                "ingredients": [
-                    "1 1/2 cups all-purpose flour",
-                    "3 1/2 teaspoons baking powder",
-                    "1 teaspoon salt",
-                    "1 tablespoon white sugar",
-                    "1 1/4 cups milk",
-                    "1 egg",
-                    "3 tablespoons butter, melted"
-                ]
-            },
-            {
-                "name": "Eggs",
-                "description": "A delicious breakfast food",
-                "ingredients": [
-                    "1 1/2 cups all-purpose flour",
-                    "3 1/2 teaspoons baking powder",
-                    "1 teaspoon salt",
-                    "1 tablespoon white sugar",
-                    "1 1/4 cups milk",
-                    "1 egg",
-                    "3 tablespoons butter, melted"
-                ]
-            }
-        ]);
-
-        console.log('Documents insérés =>', insertData);
-    } catch(e) { throw e; }
+    
 }
 
 app.get('/start', async (req, res) => {
