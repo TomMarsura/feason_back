@@ -22,9 +22,14 @@ async function getIngredientsCollection(){
     return client.db('feason').collection('ingredients');
 }
 
-/* ROUTES */
+async function getRecipesCollection() {
+    await client.connect();
+    console.log('Connected to MongoDB');
+    return client.db('feason').collection('recipes');
+}
 
-app.use('/ingredients', ingredientsRoute);
+
+/* ROUTES */
 
 app.get('/ingredients', async (req, res) => {
     const collection = await getIngredientsCollection();
@@ -39,14 +44,16 @@ app.get('/ingredients', async (req, res) => {
     }
 });
 
+app.get('/recipes', async (req, res) => {
+    const collection = await getRecipesCollection(); // Assurez-vous d'avoir une fonction similaire à getIngredientsCollection pour obtenir la collection de recettes
 
-app.get('/start', async (req, res) => {
     try {
-        await main(); // Appel de la fonction main
-        res.send('Main function called successfully');
+        const recipes = await collection.find({}).toArray();
+        res.json(recipes);
+        console.log('Recipes fetched');
     } catch (error) {
-        console.error('Error calling main function:', error);
-        res.status(500).send('Error calling main function');
+        console.error('Error fetching recipes:', error);
+        res.status(500).json({ error: 'Error fetching recipes' });
     }
 });
 
