@@ -1,46 +1,44 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
+const ingredientsRoute = require('./ingredients');
 
 const app = express();
 const port = 3200;
 
 const client = new MongoClient(process.env.MONGO_URL);
 
-async function connectToMongoDB() {
-    await client.connect();
-    console.log('Connected to MongoDB');
-    return client.db('feason').collection('recipes');
-}
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Remplacez par l'URL de votre application frontend
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
-  });
+});
 
-app.get('/recipes', async (req, res) => {
-    const collection = await connectToMongoDB();
+
+async function getIngredientsCollection(){
+    await client.connect();
+    console.log('Connected to MongoDB');
+    return client.db('feason').collection('ingredients');
+}
+
+/* ROUTES */
+
+app.use('/ingredients', ingredientsRoute);
+
+app.get('/ingredients', async (req, res) => {
+    const collection = await getIngredientsCollection();
+
     try {
-        const recipes = await collection.find({}).toArray();
-        res.json(recipes);
+        const ingredients = await collection.find({}).toArray();
+        res.json(ingredients); // Correction : Utilisez ingredients au lieu de recipes
+        console.log('Ingredients fetched');
     } catch (error) {
-        console.error('Error fetching recipes:', error);
-        res.status(500).json({ error: 'Error fetching recipes' });
+        console.error('Error fetching ingredients:', error);
+        res.status(500).json({ error: 'Error fetching ingredients' });
     }
 });
 
-// Ajoutez d'autres routes selon vos besoins
-
-async function main() {
-    await client.connect();
-    console.log('Connected to MongoDB');
-    const db = client.db('feason');
-    const collection = db.collection('recipes');
-    
-    
-}
 
 app.get('/start', async (req, res) => {
     try {
